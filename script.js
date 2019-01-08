@@ -22,8 +22,6 @@ window.onload = () => {
 
 class Game{
     constructor(){
-        this.typist;
-        this.animations;
     }
 
     draw(keyCode){
