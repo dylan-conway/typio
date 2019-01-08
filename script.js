@@ -10,10 +10,14 @@ let game;
 window.onload = () => {
     c.canvas = document.getElementById('canvas');
     c.ctx = c.canvas.getContext('2d');
+    c.canvas.width = innerWidth;
+    c.canvas.height = innerHeight;
 
     game = new Game();
 
-
+    window.addEventListener('keydown', function(event){
+        game.draw(String.fromCharCode(event.keyCode));
+    })
 }
 
 class Game{
@@ -22,8 +26,9 @@ class Game{
         this.animations;
     }
 
-    draw(){
+    draw(keyCode){
         c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
-
+        c.ctx.font = '68px Times New Roman';
+        c.ctx.fillText(keyCode, 100, 100, 100);
     }
 }
