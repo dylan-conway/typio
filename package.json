@@ -1,0 +1,20 @@
+{
+  "name": "typio",
+  "version": "1.0.0",
+  "description": "type racer",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylan-conway/typio.git"
+  },
+  "author": "Dylan Conway and Miles Wright",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dylan-conway/typio/issues"
+  },
+  "homepage": "https://github.com/dylan-conway/typio#readme",
+  "dependencies": {}
+}
