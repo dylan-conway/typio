@@ -43,14 +43,17 @@ class Game{
             // c.ctx.drawImage(this.numbersImage, code * this.charWidth, 0,
             //                 this.charWidth, this.charHeight, 100, 100,
             //                 this.charWidth, this.charHeight);
+            for(let i = 0; i < this.characters; i ++){
+                this.characters[i].draw();
+            }
         }else{
             c.ctx.font = '68px Times New Roman';
             c.ctx.fillText(String.fromCharCode(this.code), 100, 100, 100);
+
+            console.log(this, this.characters);
         }
 
-        for(let i = 0; i < this.characters; i ++){
-            this.characters[i].draw();
-        }
+        
     }
 }
 
