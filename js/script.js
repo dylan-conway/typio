@@ -18,9 +18,17 @@ window.onload = () => {
 
     game = new Game();
 
+    let sentence = new Text('Testing.');
+    for(let i = 0; i < sentence.text.length; i ++){
+        console.log(sentence.text[i].charCodeAt());
+    }
+
+    window.addEventListener('keydown', function(e){Key.onKeyDown(e);}, false);
+    window.addEventListener('keyup', function(e){Key.onKeyUp(e);}, false);
+
     window.addEventListener('keydown', function(event){
         // game.draw(String.fromCharCode(event.keyCode));
-        game.draw(event.keyCode);
+        game.draw(event.keyCode, Key.isDown(Key.SHIFT));
     })
 }
 
@@ -34,19 +42,29 @@ class Game{
         this.numbersImage.src = 'images/numbers.png';
     }
 
-    draw(keyCode){
-        this.code = keyCode;
+    draw(keyCode, shift){
         c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
 
-        if(this.code >= 48 && this.code <= 57){
-            this.characters.push(new Character(100, 100, 'images/numbers.png', this.code - 48));
-            // c.ctx.drawImage(this.numbersImage, code * this.charWidth, 0,
-            //                 this.charWidth, this.charHeight, 100, 100,
-            //                 this.charWidth, this.charHeight);
-        }else{
+        this.code = keyCode;
+        let code = keyCode;
+
+        if(shift){
             c.ctx.font = '68px Times New Roman';
             c.ctx.fillText(String.fromCharCode(this.code), 100, 100, 100);
+        }else{
+            if(code >= 48 && code <= 57){
+                this.characters.push(new Character(100, 100, 'images/numbers.png', this.code - 48))
+                // c.ctx.drawImage(this.numbersImage, code * this.charWidth, 0,
+                //                 this.charWidth, this.charHeight, 100, 100,
+                //                 this.charWidth, this.charHeight);
+            }
         }
+
+        
+            
+        
+        
+        
 
         for(let i = 0; i < this.characters; i ++){
             this.characters[i].draw();
@@ -67,5 +85,29 @@ class Character{
         c.ctx.drawImage(this.image, CHARWIDTH * this.srcIndex, 0,
                         CHARWIDTH, CHARHEIGHT, this.x, this.y,
                         CHARWIDTH, CHARHEIGHT);
+    }
+}
+
+class Text{
+    constructor(text){
+        this.text = text;
+    }
+}
+
+// Input
+let Key = {
+    _pressed: {},
+    SHIFT: 16,
+
+    isDown: function(keyCode){
+        return this._pressed[keyCode];
+    },
+
+    onKeyDown: function(e){
+        this._pressed[e.keyCode] = true;
+    },
+
+    onKeyUp: function(e){
+        delete this._pressed[e.keyCode];
     }
 }
