@@ -45,30 +45,22 @@ class Game{
     draw(keyCode, shift){
         c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
 
-        this.code = keyCode;
-        let code = keyCode;
-
-        if(shift){
+        if(this.code >= 48 && this.code <= 57){
+            this.characters.push(new Character(100, 100, 'images/numbers.png', this.code - 48));
+            // c.ctx.drawImage(this.numbersImage, code * this.charWidth, 0,
+            //                 this.charWidth, this.charHeight, 100, 100,
+            //                 this.charWidth, this.charHeight);
+            for(let i = 0; i < this.characters; i ++){
+                this.characters[i].draw();
+            }
+        }else{
             c.ctx.font = '68px Times New Roman';
             c.ctx.fillText(String.fromCharCode(this.code), 100, 100, 100);
-        }else{
-            if(code >= 48 && code <= 57){
-                this.characters.push(new Character(100, 100, 'images/numbers.png', this.code - 48))
-                // c.ctx.drawImage(this.numbersImage, code * this.charWidth, 0,
-                //                 this.charWidth, this.charHeight, 100, 100,
-                //                 this.charWidth, this.charHeight);
-            }
+
+            console.log(this, this.characters);
         }
 
         
-            
-        
-        
-        
-
-        for(let i = 0; i < this.characters; i ++){
-            this.characters[i].draw();
-        }
     }
 }
 
