@@ -57,7 +57,7 @@ class Game{
             c.ctx.font = '68px Times New Roman';
             c.ctx.fillText(String.fromCharCode(this.code), 100, 100, 100);
 
-            console.log(this, this.characters);
+            console.log(this);
         }
 
         
