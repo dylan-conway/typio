@@ -7,8 +7,8 @@ let CHARWIDTH = 30;
 let CHARHEIGHT = 30;
 
 let c = {canvas: undefined, ctx: undefined};
-let mouse = {x: undefined, y: undefined};
-let game;
+let m = {x: undefined, y: undefined};
+let g;
 
 window.onload = () => {
     c.canvas = document.getElementById('canvas');
@@ -16,51 +16,43 @@ window.onload = () => {
     c.canvas.width = innerWidth;
     c.canvas.height = innerHeight;
 
-    game = new Game();
+    g = new Game();
 
-    let sentence = new Text('Testing.');
-    for(let i = 0; i < sentence.text.length; i ++){
-        console.log(sentence.text[i].charCodeAt());
-    }
+    g.objects.addButton(new StartButton(200, 200, 200, 40));
 
-    window.addEventListener('keydown', function(e){Key.onKeyDown(e);}, false);
-    window.addEventListener('keyup', function(e){Key.onKeyUp(e);}, false);
+    window.addEventListener("mousemove", function(event){
+        m.x = event.x;
+        m.y = event.y;
+    });
 
-    window.addEventListener('keydown', function(event){
-        // game.draw(String.fromCharCode(event.keyCode));
-        game.draw(event.keyCode, Key.isDown(Key.SHIFT));
-    })
+    window.addEventListener("click", function(){
+        g.click();
+    });
+
+    // window.addEventListener('keydown', function(e){Key.onKeyDown(e);}, false);
+    // window.addEventListener('keyup', function(e){Key.onKeyUp(e);}, false);
+
+    // window.addEventListener('keydown', function(event){
+    //     game.draw(String.fromCharCode(event.keyCode));
+    //     game.draw(event.keyCode, Key.isDown(Key.SHIFT));
+    // })
+
+    g.draw();
 }
 
 class Game{
     constructor(){
-        this.characters = [];
-        this.code;
-        this.charWidth = 30;
-        this.charHeight = 30;
-        this.numbersImage = new Image();
-        this.numbersImage.src = 'images/numbers.png';
+        this.objects = new Objects();
     }
 
-    draw(keyCode, shift){
+    draw(){
         c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
 
-        if(this.code >= 48 && this.code <= 57){
-            this.characters.push(new Character(100, 100, 'images/numbers.png', this.code - 48));
-            // c.ctx.drawImage(this.numbersImage, code * this.charWidth, 0,
-            //                 this.charWidth, this.charHeight, 100, 100,
-            //                 this.charWidth, this.charHeight);
-            for(let i = 0; i < this.characters; i ++){
-                this.characters[i].draw();
-            }
-        }else{
-            c.ctx.font = '68px Times New Roman';
-            c.ctx.fillText(String.fromCharCode(this.code), 100, 100, 100);
+        this.objects.draw();
+    }
 
-            console.log(this);
-        }
-
-        
+    click(){
+        this.objects.click();
     }
 }
 
