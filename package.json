@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/dylan-conway/typio#readme",
   "dependencies": {
-    "express": "^4.16.4",
-    "socket.io": "^2.2.0"
+    "keyboard-handler": "^2.0.0"
   }
 }

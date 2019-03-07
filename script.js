@@ -1,3 +1,6 @@
+
+import * as keyboard from 'keyboard-handler'
+
 /*
     Every key press will call game.draw() and pass
     through the key that was pressed.
@@ -18,8 +21,6 @@ window.onload = () => {
 
     g = new Game();
 
-    g.objects.addButton(new StartButton(200, 200, 200, 40));
-
     window.addEventListener("mousemove", function(event){
         m.x = event.x;
         m.y = event.y;
@@ -29,20 +30,16 @@ window.onload = () => {
         g.click();
     });
 
-    // window.addEventListener('keydown', function(e){Key.onKeyDown(e);}, false);
-    // window.addEventListener('keyup', function(e){Key.onKeyUp(e);}, false);
-
-    // window.addEventListener('keydown', function(event){
-    //     game.draw(String.fromCharCode(event.keyCode));
-    //     game.draw(event.keyCode, Key.isDown(Key.SHIFT));
-    // })
-
-    g.draw();
+    keyboard.keyPressed(e => {
+        console.log(e.which);
+    });
 }
 
 class Game{
     constructor(){
         this.objects = new Objects();
+        this.posX = 300;
+        this.posY = 300;
     }
 
     draw(){
@@ -75,23 +72,5 @@ class Character{
 class Text{
     constructor(text){
         this.text = text;
-    }
-}
-
-// Input
-let Key = {
-    _pressed: {},
-    SHIFT: 16,
-
-    isDown: function(keyCode){
-        return this._pressed[keyCode];
-    },
-
-    onKeyDown: function(e){
-        this._pressed[e.keyCode] = true;
-    },
-
-    onKeyUp: function(e){
-        delete this._pressed[e.keyCode];
     }
 }
