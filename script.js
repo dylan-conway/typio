@@ -31,7 +31,7 @@ window.onload = () => {
 
     window.addEventListener("keypress", (event) => {
         console.log("keypress:");
-        console.log(event.which);
+        console.log(event.which, event.keyCode);
         g.draw(event.which);
     })
 }
@@ -72,7 +72,7 @@ class Game{
     }
     
     draw(keycode){
-        // c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
+        c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
         if(keycode){
             console.log(keycode - CHAR_INDEX_OFFSET);
             // Check the boundaries of the x and y cords of where the character
@@ -83,9 +83,9 @@ class Game{
             }
             let index = keycode - CHAR_INDEX_OFFSET;
             this.objects.addLetter(new Letter(this.posX, this.posY, index));
-            putImage(this.charImg, index * this.charWidth, 0,
-                                             this.charWidth, this.charHeight, this.posX, this.posY,
-                                             this.charWidth, this.charHeight)
+            // putImage(this.charImg, index * this.charWidth, 0,
+            //                                  this.charWidth, this.charHeight, this.posX, this.posY,
+            //                                  this.charWidth, this.charHeight)
             
             this.posX += this.charWidth;
         }
@@ -99,7 +99,15 @@ class Game{
 }
 
 class Letter{
-    constructor(x, y, index)
+    constructor(x, y, index){
+        this.x = x;
+        this.y = y;
+        this.index = index;
+    }
+
+    draw(){
+        putImage(g.charImg, this.index * g.charWidth, 0, g.charWidth, g.charHeight, this.x, this.y, g.charWidth, g.charHeight);
+    }
 }
 
 function putImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight){
