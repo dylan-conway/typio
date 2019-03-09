@@ -20,20 +20,27 @@ window.onload = () => {
 
     g = new Game();
 
-    window.addEventListener("mousemove", function(event){
+    window.addEventListener("mousemove", (event) => {
         m.x = event.x;
         m.y = event.y;
     });
 
-    window.addEventListener("click", function(){
+    window.addEventListener("click", () => {
         g.click();
     });
 
     window.addEventListener("keypress", (event) => {
         console.log("keypress:");
-        console.log(event.which, event.keyCode);
+        console.log(event.which);
         g.draw(event.which);
-    })
+    });
+
+    window.addEventListener("keydown", (event) => {
+        key = event.which;
+        if(key == 8){
+            g.delete();
+        }
+    });
 }
 
 class Game{
@@ -91,6 +98,15 @@ class Game{
         }
         
         this.objects.draw();
+    }
+
+    delete(){
+        if(this.objects.letters.length){ 
+            this.posX = this.objects.letters[this.objects.letters.length - 1].x;
+            this.posY = this.objects.letters[this.objects.letters.length - 1].y;
+            this.objects.letters.pop();
+            this.draw();
+        }
     }
 
     click(){
