@@ -4,8 +4,10 @@
     through the key that was pressed.
 */
 
+import Objects from './objects.js';
+
 let CHAR_INDEX_OFFSET = 32;
-let FONT_SRC = 'images/characters32.png';
+let FONT_SRC = 'res/characters32.png';
 
 let c = {canvas: undefined, ctx: undefined};
 let m = {x: undefined, y: undefined};
@@ -19,14 +21,14 @@ window.onload = () => {
     
 
     g = new Game();
+    
+    window.addEventListener("click", () => {
+        g.click();
+    });
 
     window.addEventListener("mousemove", (event) => {
         m.x = event.x;
         m.y = event.y;
-    });
-
-    window.addEventListener("click", () => {
-        g.click();
     });
 
     window.addEventListener("keypress", (event) => {
@@ -36,7 +38,7 @@ window.onload = () => {
     });
 
     window.addEventListener("keydown", (event) => {
-        key = event.which;
+        let key = event.which;
         if(key == 8){
             g.delete();
         }
