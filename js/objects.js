@@ -1,17 +1,7 @@
 (function(){
     class Objects{
         constructor(){
-            this.letters = [];
-            this.texts = [];
             this.buttons = [];
-        }
-
-        addLetter(letter){
-            this.letters.push(letter);
-        }
-
-        addText(text){
-            this.texts.push(text);
         }
 
         addButton(button){
@@ -19,14 +9,6 @@
         }
 
         draw(){
-            for(let letter of this.letters){
-                letter.draw();
-            }
-
-            for(let text of this.texts){
-                text.draw();
-            }
-
             for(let button of this.buttons){
                 button.draw();
             }

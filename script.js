@@ -1,6 +1,4 @@
 
-import * as keyboard from 'keyboard-handler'
-
 /*
     Every key press will call game.draw() and pass
     through the key that was pressed.
@@ -30,47 +28,33 @@ window.onload = () => {
         g.click();
     });
 
-    keyboard.keyPressed(e => {
-        console.log(e.which);
-    });
+    window.addEventListener("keypress", (event) => {
+        console.log("keypress:");
+        console.log(event.which);
+        g.draw(event.which);
+    })
 }
 
 class Game{
     constructor(){
         this.objects = new Objects();
+        this.charImage = new Image();
+        this.charImage.src = 'images/characters.png';
         this.posX = 300;
         this.posY = 300;
     }
 
-    draw(){
+    draw(keycode){
         c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
 
+        if(keycode){
+            c.ctx.drawImage(this.charImage, 32 * keycode + 32, 0, 32, 32, this.posX, this.posY, 32, 32);
+        }
+        
         this.objects.draw();
     }
 
     click(){
         this.objects.click();
-    }
-}
-
-class Character{
-    constructor(x, y, src, srcIndex){
-        this.x = x;
-        this.y = y;
-        this.image = new Image();
-        this.image.src = src;
-        this.srcIndex = srcIndex;
-    }
-
-    draw(){
-        c.ctx.drawImage(this.image, CHARWIDTH * this.srcIndex, 0,
-                        CHARWIDTH, CHARHEIGHT, this.x, this.y,
-                        CHARWIDTH, CHARHEIGHT);
-    }
-}
-
-class Text{
-    constructor(text){
-        this.text = text;
     }
 }

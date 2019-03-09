@@ -16,7 +16,5 @@
     "url": "https://github.com/dylan-conway/typio/issues"
   },
   "homepage": "https://github.com/dylan-conway/typio#readme",
-  "dependencies": {
-    "keyboard-handler": "^2.0.0"
-  }
+  "dependencies": {}
 }
