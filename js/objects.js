@@ -2,15 +2,24 @@
     class Objects{
         constructor(){
             this.buttons = [];
+            this.letters = [];
         }
 
         addButton(button){
             this.buttons.push(button);
         }
 
+        addLetter(letter){
+            this.letters.push(letter);
+        }
+
         draw(){
             for(let button of this.buttons){
                 button.draw();
+            }
+
+            for(let letter of this.letters){
+                letter.draw();
             }
         }
 
