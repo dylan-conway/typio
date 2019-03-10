@@ -22,6 +22,12 @@ export default class Objects{
         }
     }
 
+    scroll(num){
+        for(let letter of this.letters){
+            letter.y += num;
+        }
+    }
+
     click(){
         for(let b of this.buttons){
             if(m.x > b.x && m.x < b.x + b.width &&
