@@ -97,7 +97,7 @@ class Game{
 
         if(keycode){
             if(this.posY >= this.height / 8 * 7){
-                this.scroll(-CH / 4);
+                this.scroll(-(CH + (CH / 4)));
             }
             let index = keycode - CHAR_INDEX_OFFSET;
             this.objects.addLetter(new Letter(this.posX, this.posY, index));
@@ -106,7 +106,7 @@ class Game{
 
             if(this.posX == this.width){
                 this.posX = 0;
-                this.posY += CH;
+                this.posY += CH + (CH / 4);
             }
         }
 
@@ -116,6 +116,20 @@ class Game{
         ctx.fillStyle = 'gray';
         ctx.fillRect(0, 0, this.width, CH * 2);
 
+        this.charImg.onload = () => {
+            ctx.drawImage(this.charImg, (116 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 0, CH / 2, CW, CH);
+            ctx.drawImage(this.charImg, (121 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 1, CH / 2, CW, CH);
+            ctx.drawImage(this.charImg, (112 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 2, CH / 2, CW, CH);
+            ctx.drawImage(this.charImg, (46 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 3, CH / 2, CW, CH);
+            ctx.drawImage(this.charImg, (105 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 4, CH / 2, CW, CH);
+            ctx.drawImage(this.charImg, (111 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 5, CH / 2, CW, CH);
+        }
+        ctx.drawImage(this.charImg, (116 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 0, CH / 2, CW, CH);
+        ctx.drawImage(this.charImg, (121 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 1, CH / 2, CW, CH);
+        ctx.drawImage(this.charImg, (112 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 2, CH / 2, CW, CH);
+        ctx.drawImage(this.charImg, (46 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 3, CH / 2, CW, CH);
+        ctx.drawImage(this.charImg, (105 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 4, CH / 2, CW, CH);
+        ctx.drawImage(this.charImg, (111 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 5, CH / 2, CW, CH);
         console.log(this.posX, this.posY);
     }
 
