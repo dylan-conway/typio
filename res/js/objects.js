@@ -12,13 +12,13 @@ export default class Objects{
         this.letters.push(letter);
     }
 
-    draw(){
+    draw(ctx){
         for(let button of this.buttons){
-            button.draw();
+            button.draw(ctx);
         }
 
         for(let letter of this.letters){
-            letter.draw();
+            letter.draw(ctx);
         }
     }
 

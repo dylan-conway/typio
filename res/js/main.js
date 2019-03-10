@@ -54,7 +54,7 @@ window.onload = () => {
 
     window.addEventListener("keypress", (event) => {
         // Pass the event code to the game draw method.
-        g.draw(event.which);
+        g.draw(ctx, event.which);
     });
 
     window.addEventListener("keydown", (event) => {
@@ -87,17 +87,17 @@ class Game{
         this.posY = CH * 2;
 
         // Call the initial draw.
-        this.draw();
+        this.draw(ctx);
     }
     
-    draw(keycode){
+    draw(ctx, keycode){
         // Refresh the canvas.
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, this.width, this.height);
 
         if(keycode){
             if(this.posY >= this.height / 8 * 7){
-                this.scroll(-CH / 16);
+                this.scroll(-CH / 4);
             }
             let index = keycode - CHAR_INDEX_OFFSET;
             this.objects.addLetter(new Letter(this.posX, this.posY, index));
@@ -110,7 +110,7 @@ class Game{
             }
         }
 
-        this.objects.draw();
+        this.objects.draw(ctx);
 
         // Top bar.
         ctx.fillStyle = 'gray';
@@ -133,7 +133,7 @@ class Game{
             this.posX = this.objects.letters[this.objects.letters.length - 1].x;
             this.posY = this.objects.letters[this.objects.letters.length - 1].y;
             this.objects.letters.pop();
-            this.draw();
+            this.draw(ctx);
         }
     }
 
@@ -147,10 +147,19 @@ class Letter{
         this.x = x;
         this.y = y;
         this.index = index;
+        this.visible = true;
     }
 
-    draw(){
-        putImage(g.charImg, this.index * CW, 0, CW, CH, this.x, this.y, CW, CH);
+    draw(ctx){
+        if(this.y + CH < CH * 2){
+            this.visible = false;
+        }else{
+            this.visible = true;
+        }
+
+        if(this.visible){
+            ctx.drawImage(g.charImg, this.index * CW, 0, CW, CH, this.x, this.y, CW, CH);
+        }
     }
 }
 
