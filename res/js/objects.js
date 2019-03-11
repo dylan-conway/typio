@@ -1,3 +1,5 @@
+import m from './main.js';
+
 export default class Objects{
     constructor(){
         this.buttons = [];
