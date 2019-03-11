@@ -137,6 +137,10 @@ class Game{
         ctx.drawImage(this.charImg, (105 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 4, CH / 2, CW, CH);
         ctx.drawImage(this.charImg, (111 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 5, CH / 2, CW, CH);
         console.log(this.posX, this.posY);
+
+        // Cursor/typing line.
+        ctx.fillStyle = 'black';
+        ctx.fillRect(this.posX + 2, this.posY, 2, CH);
     }
 
     scroll(num){
