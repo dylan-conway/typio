@@ -10,7 +10,19 @@ import Objects from './objects.js';
 // starts at 32 but the index for the image starts
 // at 0.
 let CHAR_INDEX_OFFSET = 32;
-let FONT_SRC = '../res/images/characters16.png';
+// Set the correct size of the font.
+let font32 = Math.floor(innerWidth / 32);
+let font16 = Math.floor(innerWidth / 16);
+let font8 = Math.floor(innerWidth / 8);
+let FONT_SRC;
+if(font32 > 48){
+    FONT_SRC = '../res/images/terminalFont32.png';
+}else if(font32 <= 48 && font16 > 48){
+    FONT_SRC = '../res/images/terminalFont16.png';
+}else if(font16 <= 48){
+    FONT_SRC = '../res/images/terminalFont8.png';
+}
+
 // Character width and height.
 let CW, CH;
 
@@ -24,7 +36,9 @@ let g;
 window.onload = () => {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-    if(FONT_SRC.includes('16')){
+    if(FONT_SRC.includes('8')){
+        CW = CH = 8;
+    }else if(FONT_SRC.includes('16')){
         CW = CH = 16;
     }else if(FONT_SRC.includes('32')){
         CW = CH = 32;
@@ -32,7 +46,7 @@ window.onload = () => {
     
     // Find the appropriate width and height for the canvas.
     let maxDiv = Math.floor(innerWidth / CW);
-    canvas.width = (maxDiv - 3) * CW;
+    canvas.width = 48 * CW;
     // maxDiv = Math.floor(innerHeight / CH);
     // canvas.height = maxDiv * CH;
     canvas.height = innerHeight;
@@ -98,7 +112,7 @@ class Game{
         // Draw blue lines.
         ctx.fillStyle = 'cornflowerblue';
         for(let i = 0; i < canvas.height / (CH + (CH / 4)); i ++){
-            ctx.fillRect(0, (i * (CH + (CH / 4))) + (CH * 2 - (CH / 4)), canvas.width, 1);
+            ctx.fillRect(0, (i * (CH + (CH / 4))) + (CH * 3), canvas.width, 1);
         }
 
         if(keycode){
@@ -122,6 +136,7 @@ class Game{
         ctx.fillStyle = 'gray';
         ctx.fillRect(0, 0, this.width, (CH * 2) - (CH / 4));
 
+        // Typio at the top.
         this.charImg.onload = () => {
             ctx.drawImage(this.charImg, (116 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 0, CH / 2, CW, CH);
             ctx.drawImage(this.charImg, (121 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 1, CH / 2, CW, CH);
@@ -136,11 +151,10 @@ class Game{
         ctx.drawImage(this.charImg, (46 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 3, CH / 2, CW, CH);
         ctx.drawImage(this.charImg, (105 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 4, CH / 2, CW, CH);
         ctx.drawImage(this.charImg, (111 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 5, CH / 2, CW, CH);
-        console.log(this.posX, this.posY);
 
         // Cursor/typing line.
         ctx.fillStyle = 'black';
-        ctx.fillRect(this.posX + 2, this.posY, 2, CH);
+        ctx.fillRect(this.posX + 1, this.posY, 4, CH);
     }
 
     scroll(num){
