@@ -10,7 +10,7 @@ import Objects from './objects.js';
 // starts at 32 but the index for the image starts
 // at 0.
 let CHAR_INDEX_OFFSET = 32;
-let FONT_SRC = '../res/images/characters32.png';
+let FONT_SRC = '../res/images/characters16.png';
 // Character width and height.
 let CW, CH;
 
@@ -95,8 +95,14 @@ class Game{
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, this.width, this.height);
 
+        // Draw blue lines.
+        ctx.fillStyle = 'cornflowerblue';
+        for(let i = 0; i < canvas.height / (CH + (CH / 4)); i ++){
+            ctx.fillRect(0, (i * (CH + (CH / 4))) + (CH * 2 - (CH / 4)), canvas.width, 1);
+        }
+
         if(keycode){
-            if(this.posY >= this.height / 8 * 7){
+            if(this.posY >= this.height / 8 * 5){
                 this.scroll(-(CH + (CH / 4)));
             }
             let index = keycode - CHAR_INDEX_OFFSET;
@@ -114,7 +120,7 @@ class Game{
 
         // Top bar.
         ctx.fillStyle = 'gray';
-        ctx.fillRect(0, 0, this.width, CH * 2);
+        ctx.fillRect(0, 0, this.width, (CH * 2) - (CH / 4));
 
         this.charImg.onload = () => {
             ctx.drawImage(this.charImg, (116 - CHAR_INDEX_OFFSET) * CW, 0, CW, CH, CW * 0, CH / 2, CW, CH);
