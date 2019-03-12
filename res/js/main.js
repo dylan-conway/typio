@@ -35,9 +35,7 @@ let CW, CH;
 
 // Canvas and the context.
 let canvas, ctx;
-// Mouse.
-let m;
-export default m = {x: undefined, y: undefined};
+
 // The game object.
 let g;
 
@@ -52,32 +50,30 @@ window.onload = () => {
         CW = CH = 32;
     }
     
-    // Find the appropriate width and height for the canvas.
-    let maxDiv = Math.floor(innerWidth / CW);
+    // Set the width and height.
     canvas.width = 48 * CW;
-    // maxDiv = Math.floor(innerHeight / CH);
-    // canvas.height = maxDiv * CH;
-    canvas.height = innerHeight;
+    canvas.height = 42 * (CH + (CH / 4));
 
     // Make the game object and pass through
     // the canvas width and height.
     g = new Game(canvas.width, canvas.height);
     
     // Click event.
-    canvas.addEventListener("click", (event) => {
-        console.log(event.x, event.y);
-        g.click(event.x, event.y);
-    });
-
-    // Cursor position tracking.
-    window.addEventListener("mousemove", (event) => {
-        m.x = event.x;
-        m.y = event.y;
+    canvas.addEventListener("click", (e) => {
+        console.log(e.offsetX, e.offsetY);
+        g.click(e.offsetX, e.offsetY, ctx);
     });
 
     window.addEventListener("keypress", (event) => {
         // Pass the event code to the game draw method.
-        g.draw(ctx, event.which);
+        if(event.which == 32 && event.target == document.body){
+            // If the key is space bar, then draw the space but
+            // prevent the scroll down.
+            g.draw(ctx, event.which);
+            event.preventDefault();
+        }else{
+            g.draw(ctx, event.which);    
+        }
     });
 
     window.addEventListener("keydown", (event) => {
@@ -164,7 +160,7 @@ class Game{
 
         // Draw cursor/typing line.
         ctx.fillStyle = 'black';
-        ctx.fillRect(this.posX + 1, this.posY, 4, CH);
+        ctx.fillRect(this.posX + 1, this.posY - 1, 4, CH);
 
         // Draw letters and buttons.
         this.objects.draw(ctx);
@@ -184,8 +180,8 @@ class Game{
         }
     }
 
-    click(){
-        this.objects.click();
+    click(mx, my){
+        this.objects.click(mx, my);
     }
 }
 
@@ -223,10 +219,10 @@ class Letter{
 
 class StartButton{
     constructor(){
-        this.x = canvas.width - (CW * 5);
-        this.y = CH / 2;
-        this.width = CW * 5;
-        this.height = CH;
+        this.x = canvas.width - (CW * 5) - (CW / 4);
+        this.y = CH / 2 - (CH / 4);
+        this.width = CW * 5 + (CW / 2);
+        this.height = CH + (CH / 2);
         this.image = new Image();
         this.image.src = START_BUTTON_SRC;
     }
@@ -235,23 +231,23 @@ class StartButton{
         // Draw background box.
         ctx.fillStyle = 'darkgray';
         ctx.fillRect(
-            this.x - (CW / 4),
-            this.y - (CH / 4),
-            this.width + (CW / 2),
-            this.height + (CH / 2)
+            this.x,
+            this.y,
+            this.width,
+            this.height
         );
         // Draw image.
         this.image.onload = () => {
             ctx.drawImage(
                 this.image,
-                this.x,
-                this.y
+                this.x + (CW / 8),
+                this.y + (CH / 4)
             );
         }
         ctx.drawImage(
             this.image,
-            this.x,
-            this.y
+            this.x + (CW / 8),
+            this.y + (CH / 4)
         );
     }
 

@@ -1,5 +1,3 @@
-import m from './main.js';
-
 export default class Objects{
     constructor(){
         this.buttons = [];
@@ -30,10 +28,12 @@ export default class Objects{
         }
     }
 
-    click(){
+    click(mx, my){
         for(let b of this.buttons){
-            if(m.x > b.x && m.x < b.x + b.width &&
-               m.y > b.y && m.y < b.y + b.height){
+            if(
+                mx > b.x && mx < b.x + b.width &&
+                my > b.y && my < b.y + b.height
+            ){
                 b.clicked();    
             }
         }
