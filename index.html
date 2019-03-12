@@ -8,11 +8,23 @@
     <style>
         body {
             margin: 0 0 0 0;
-            overflow: hidden;
+            /* overflow: hidden; */
             background-color: gray;
         }
         #canvasContainer {
             text-align: center;
+        }
+        footer {
+            text-align: center;
+        }
+        hr {
+            margin: 64px 32px 16px 32px;
+        }
+        .footer {
+            margin: 0 0 16px 0;
+        }
+        a {
+            margin: 0 16px 0 0;
         }
     </style>
 </head>
@@ -21,5 +33,16 @@
     <div id="canvasContainer">
         <canvas id="canvas">chrome!!!!!</canvas>
     </div>
+
+    <hr color="darkgray">
+    <footer>
+        <div class="footer">
+            <a href="localhost:5500">
+                <img src="res/images/terminalFontHome16.png" alt="Home"></a>
+            <a href="https://github.com/dylan-conway">
+                <img src="res/images/terminalFontGitHub16.png" alt="GitHub">
+            </a>
+        </div>
+    </footer>
 </body>
 </html>

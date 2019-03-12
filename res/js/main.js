@@ -64,8 +64,8 @@ window.onload = () => {
     g = new Game(canvas.width, canvas.height);
     
     // Click event.
-    window.addEventListener("click", (event) => {
-        console.log(event.offsetX - 1, event.y);
+    canvas.addEventListener("click", (event) => {
+        console.log(event.x, event.y);
         g.click(event.x, event.y);
     });
 
