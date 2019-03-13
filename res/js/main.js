@@ -312,36 +312,6 @@ class Letter{
     }
 }
 
-class Word{
-    constructor(){
-
-    }
-
-    draw(ctx){
-
-    }
-}
-
-class Sentence{
-    constructor(){
-
-    }
-
-    draw(ctx){
-
-    }
-}
-
-class Paragraph{
-    constructor(){
-
-    }
-
-    draw(ctx){
-
-    }
-}
-
 class StartButton{
     constructor(){
         this.x = canvas.width - (CW * 6) - (CW / 4) - 2;
