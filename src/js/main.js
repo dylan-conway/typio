@@ -7,7 +7,32 @@
     Author: Dylan Conway
 */
 
+import style from '../main.css';
+
+// Import images.
+import terminalFont16URL from '../images/terminalFont16.png';
+import terminalFontOneURL from '../images/terminalFontOne.png';
+import terminalFontTwoURL from '../images/terminalFontTwo.png';
+import terminalFontThreeURL from '../images/terminalFontThree.png';
+import terminalFontGoURL from '../images/terminalFontGo.png';
+import terminalFontTypioURL from '../images/terminalFontTypio16.png';
+import terminalFontStartButton16URL from '../images/terminalFontStartButton16.png';
+
+// Add the favicon.
+import faviconImg from '../images/favicon.ico';
+(function(){
+    let link = document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = faviconImg;
+    document.getElementsByTagName('head')[0].appendChild(link);
+})();
+
 import Objects from './objects.js';
+import homeImage from '../images/terminalFontHome16.png';
+import gitHubImage from '../images/terminalFontGitHub16.png';
+
+
 
 // There is this offset due to the fact the the index
 // starts at 32 but the index for the image starts
@@ -18,21 +43,19 @@ let testString = 'This is a test of typio typing. Wow you are so fast!';
 
 // Images.
 let oneImg = new Image();
-oneImg.src = '../res/images/terminalFontOne.png';
+oneImg.src = terminalFontOneURL;
 let twoImg = new Image();
-twoImg.src = '../res/images/terminalFontTwo.png';
+twoImg.src = terminalFontTwoURL;
 let threeImg = new Image();
-threeImg.src = '../res/images/terminalFontThree.png';
+threeImg.src = terminalFontThreeURL;
 let goImg = new Image();
-goImg.src = '../res/images/terminalFontGo.png';
+goImg.src = terminalFontGoURL;
 let typioImg = new Image();
-typioImg.src = '../res/images/terminalFontTypio16.png';
+typioImg.src = terminalFontTypioURL;
 let startButtonImg = new Image();
-startButtonImg.src = '../res/images/terminalFontStartButton16.png';
+startButtonImg.src = terminalFontStartButton16URL;
 let fontImg = new Image();
-fontImg.src = '../res/images/terminalFont16.png';
-
-let FONT_SRC = '../res/images/terminalFont16.png';
+fontImg.src = terminalFont16URL;
 
 // Character width and height.
 let CW, CH;
@@ -46,13 +69,12 @@ let g, p;
 window.onload = () => {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-    if(FONT_SRC.includes('8')){
-        CW = CH = 8;
-    }else if(FONT_SRC.includes('16')){
-        CW = CH = 16;
-    }else if(FONT_SRC.includes('32')){
-        CW = CH = 32;
-    }
+
+    document.getElementById('homeimage').src = homeImage;
+    document.getElementById('githubimage').src = gitHubImage;
+    
+
+    CW = CH = 16;
     
     // Set the width and height.
     canvas.width = 48 * CW;
@@ -201,14 +223,14 @@ class Game{
     }
 
     drawCountDown(ctx, num){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         if(num == 3){
-            ctx.drawImage(threeImg, 0, 0);
+            ctx.drawImage(threeImg, CW * 23, CH * 20);
         }else if(num == 2){
-            ctx.drawImage(twoImg, 0, 0);
+            ctx.drawImage(twoImg, CW * 23, CH * 20);
         }else if(num == 1){
-            ctx.drawImage(oneImg, 0, 0);
+            ctx.drawImage(oneImg, CW * 23, CH * 20);
         }else if(num == 0){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(goImg, 0, 0);
         }
     }

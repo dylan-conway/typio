@@ -1,0 +1,27 @@
+body {
+    margin: 0 0 0 0;
+    /* overflow: hidden; */
+    background-color: gray;
+}
+#canvasContainer {
+    margin: 32px 0 0 0;
+    text-align: center;
+}
+footer {
+    text-align: center;
+}
+hr {
+    margin: 192px 32px 16px 32px;
+}
+.footer {
+    margin: 0 0 16px 0;
+}
+a {
+    margin: 0 16px 0 0;
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+}
+img {
+    vertical-align: -webkit-baseline-middle;
+    padding-bottom: 10px;
+}
