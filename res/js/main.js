@@ -14,7 +14,7 @@ import Objects from './objects.js';
 // at 0.
 let CIO = 32;
 
-let testString = 'yellow';
+let testString = 'This is a test of typio typing. Wow you are so fast!';
 
 // Images.
 let oneImg = new Image();
@@ -351,14 +351,14 @@ class StartButton{
     clicked(){
         this.clickable = false;
         g.drawCountDown(ctx, 3);
-        // setTimeout(()=>{g.drawCountDown(ctx, 2)}, 1000);
-        // setTimeout(()=>{g.drawCountDown(ctx, 1)}, 2000);
-        // setTimeout(()=>{g.drawCountDown(ctx, 0)}, 3000);
-        // setTimeout(()=>{g.startGame()}, 3500);
+        setTimeout(()=>{g.drawCountDown(ctx, 2)}, 1000);
+        setTimeout(()=>{g.drawCountDown(ctx, 1)}, 2000);
+        setTimeout(()=>{g.drawCountDown(ctx, 0)}, 3000);
+        setTimeout(()=>{g.startGame()}, 3500);
 
-        setTimeout(()=>{g.drawCountDown(ctx, 2)}, 100);
-        setTimeout(()=>{g.drawCountDown(ctx, 1)}, 200);
-        setTimeout(()=>{g.drawCountDown(ctx, 0)}, 300);
-        setTimeout(()=>{g.startGame()}, 350);
+        // setTimeout(()=>{g.drawCountDown(ctx, 2)}, 100);
+        // setTimeout(()=>{g.drawCountDown(ctx, 1)}, 200);
+        // setTimeout(()=>{g.drawCountDown(ctx, 0)}, 300);
+        // setTimeout(()=>{g.startGame()}, 350);
     }
 }
