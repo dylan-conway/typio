@@ -29,14 +29,14 @@ import homeImage from '../images/terminalFontHome16.png';
 import gitHubImage from '../images/terminalFontGitHub16.png';
 
 // Add the favicon.
-import faviconImg from '../images/favicon.ico';
-(function(){
-    let link = document.createElement('link');
-    link.type = 'image/x-icon';
-    link.rel = 'shortcut icon';
-    link.href = faviconImg;
-    document.getElementsByTagName('head')[0].appendChild(link);
-})();
+// import faviconImg from '../images/favicon.ico';
+// (function(){
+//     let link = document.createElement('link');
+//     link.type = 'image/x-icon';
+//     link.rel = 'shortcut icon';
+//     link.href = faviconImg;
+//     document.getElementsByTagName('head')[0].appendChild(link);
+// })();
 
 // The texts to type.
 let texts = [
