@@ -29,18 +29,18 @@ import homeImage from '../images/terminalFontHome16.png';
 import gitHubImage from '../images/terminalFontGitHub16.png';
 
 // Add the favicon.
-// import faviconImg from '../images/favicon.ico';
-// (function(){
-//     let link = document.createElement('link');
-//     link.type = 'image/x-icon';
-//     link.rel = 'shortcut icon';
-//     link.href = faviconImg;
-//     document.getElementsByTagName('head')[0].appendChild(link);
-// })();
+import faviconImg from '../images/favicon.ico';
+(function(){
+    let link = document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = faviconImg;
+    document.getElementsByTagName('head')[0].appendChild(link);
+})();
 
 // The texts to type.
 let texts = [
-    'Room temperature / Eggnog in my coffee cup / Fall is delicious.',
+    'Room temperature / eggnog in my coffee cup. / Fall is delicious.',
     'Sun shining all day / A stone cold pencil in hand / Homework in silence.',
     'The keyboard clicking / Code flowing onto the screen / Not one finished app.',
     'because cards are dumb / i got you some strawberries / they might be poison.',
@@ -48,7 +48,7 @@ let texts = [
     "From computer to / computer, there is a line / to more computers.",
     'In the computer / another computer is / running computer.',
     'From old to summer / The old computer to / the new computer.',
-    "Don't old, computer / computer, old, must compute / How much computer.",
+    "Don't old, computer. / Computer, however old, / must still computer.",
     'I old computer. / Still must old summer compute / I have been summer.'
 ];
 
