@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "type racing website",
   "main": "index.js",
-  "repository": "https://github.com/dylan-conway/typio.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylan-conway/typio.git"
+  },
   "author": "Dylan Conway",
   "license": "MIT",
   "scripts": {
@@ -11,5 +14,15 @@
     "start": "webpack-dev-server"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "css-loader": "^2.1.1",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "bugs": {
+    "url": "https://github.com/dylan-conway/typio/issues"
+  },
+  "homepage": "https://github.com/dylan-conway/typio#readme"
 }

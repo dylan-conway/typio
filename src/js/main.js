@@ -142,7 +142,6 @@ class Game{
 
         // Check correctness of key stroke.
         if(keycode != 1000){
-            console.log("Index before logic: " + p.textIndex)
             // If the character entered is the last key, first
             // check to see if the key has already been typed.
             if(p.textIndex >= p.text.length - 1){
@@ -189,7 +188,6 @@ class Game{
                 }
                 p.textIndex ++;
             }
-            console.log("Index after logic: " + p.textIndex);
         }
 
         // Draw letters and buttons.
