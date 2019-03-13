@@ -22,20 +22,25 @@ export default class Objects{
         }
     }
 
-    scroll(num){
-        for(let letter of this.letters){
-            letter.y += num;
-        }
-    }
-
     click(mx, my){
         for(let b of this.buttons){
             if(
                 mx > b.x && mx < b.x + b.width &&
-                my > b.y && my < b.y + b.height
+                my > b.y && my < b.y + b.height &&
+                b.clickable
             ){
                 b.clicked();    
             }
         }
+    }
+
+    checkCorrectness(){
+        for(let l of this.letters){
+            if(l.typed == 2){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
