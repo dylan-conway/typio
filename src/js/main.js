@@ -7,7 +7,12 @@
     Author: Dylan Conway
 */
 
-import style from '../main.css';
+// Import other files.
+import Objects from './objects.js';
+import Utils from './utils.js';
+
+// Import CSS.
+import '../css/main.css';
 
 // Import images.
 import terminalFont16URL from '../images/terminalFont16.png';
@@ -15,8 +20,11 @@ import terminalFontOneURL from '../images/terminalFontOne.png';
 import terminalFontTwoURL from '../images/terminalFontTwo.png';
 import terminalFontThreeURL from '../images/terminalFontThree.png';
 import terminalFontGoURL from '../images/terminalFontGo.png';
-import terminalFontTypioURL from '../images/terminalFontTypio16.png';
+import terminalFontTypio16URL from '../images/terminalFontTypio16.png';
 import terminalFontStartButton16URL from '../images/terminalFontStartButton16.png';
+
+import homeImage from '../images/terminalFontHome16.png';
+import gitHubImage from '../images/terminalFontGitHub16.png';
 
 // Add the favicon.
 import faviconImg from '../images/favicon.ico';
@@ -28,34 +36,26 @@ import faviconImg from '../images/favicon.ico';
     document.getElementsByTagName('head')[0].appendChild(link);
 })();
 
-import Objects from './objects.js';
-import homeImage from '../images/terminalFontHome16.png';
-import gitHubImage from '../images/terminalFontGitHub16.png';
+// The texts to type.
+let texts = [
+    'Room temperature/ Eggnog in my coffee cup/ Fall is delicious.',
+    'Rain falling all day/ A stone cold pencil in hand/ Homework in silence.',
+    'The keyboard clicking/ Code flowing onto the screen/ I am a code god.'
+];
 
-
+// Images.
+let oneImg = Utils.newImage(terminalFontOneURL);
+let twoImg = Utils.newImage(terminalFontTwoURL);
+let threeImg = Utils.newImage(terminalFontThreeURL);
+let goImg = Utils.newImage(terminalFontGoURL);
+let typioImg = Utils.newImage(terminalFontTypio16URL);
+let startButtonImg = Utils.newImage(terminalFontStartButton16URL);
+let fontImg = Utils.newImage(terminalFont16URL);
 
 // There is this offset due to the fact the the index
 // starts at 32 but the index for the image starts
 // at 0.
 let CIO = 32;
-
-let testString = 'This is a test of typio typing. Wow you are so fast!';
-
-// Images.
-let oneImg = new Image();
-oneImg.src = terminalFontOneURL;
-let twoImg = new Image();
-twoImg.src = terminalFontTwoURL;
-let threeImg = new Image();
-threeImg.src = terminalFontThreeURL;
-let goImg = new Image();
-goImg.src = terminalFontGoURL;
-let typioImg = new Image();
-typioImg.src = terminalFontTypioURL;
-let startButtonImg = new Image();
-startButtonImg.src = terminalFontStartButton16URL;
-let fontImg = new Image();
-fontImg.src = terminalFont16URL;
 
 // Character width and height.
 let CW, CH;
@@ -63,8 +63,8 @@ let CW, CH;
 // Canvas and the context.
 let canvas, ctx;
 
-// The game and player object.
-let g, p;
+// The game object.
+let g
 
 window.onload = () => {
     canvas = document.getElementById('canvas');
@@ -83,9 +83,6 @@ window.onload = () => {
     // Make the game object and pass through
     // the canvas width and height.
     g = new Game(canvas.width, canvas.height);
-
-    // Make player.
-    p = new Player();
     
     // Click event.
     canvas.addEventListener("click", (e) => {
@@ -121,6 +118,8 @@ class Game{
         this.width = width;
         this.height = height;
         this.canType = false;
+        this.text;
+        this.textIndex;
         this.objects;
         this.posX;
         this.posY;
@@ -160,14 +159,14 @@ class Game{
         // Draw Typio at the top.
         ctx.drawImage(typioImg, CW * 1, CH / 4);
         ctx.fillStyle = 'black';
-        ctx.fillRect(CW * 1 + 2, CH * 1 + 6, CW * 6 - 2, 2);
+        ctx.fillRect(CW * 1, CH * 1 + 6, CW * 10, 2);
 
         // Check correctness of key stroke.
         if(keycode != 1000){
             // If the character entered is the last key, first
             // check to see if the key has already been typed.
-            if(p.textIndex >= p.text.length - 1){
-                if(this.objects.letters[p.text.length - 1].typed == 0){
+            if(g.textIndex >= g.text.length - 1){
+                if(this.objects.letters[g.text.length - 1].typed == 0){
                     // If the key has not been typed, go ahead and
                     // type it
                     this.posX += CW;
@@ -175,13 +174,13 @@ class Game{
                         this.posX = CW * 6;
                         this.posY += CH + (CH / 4);
                     }
-                    if(p.text.charCodeAt(p.textIndex) == keycode){
-                        this.objects.letters[p.textIndex].typed = 1;
+                    if(g.text.charCodeAt(g.textIndex) == keycode){
+                        this.objects.letters[g.textIndex].typed = 1;
                     }else{
-                        this.objects.letters[p.textIndex].typed = 2;
+                        this.objects.letters[g.textIndex].typed = 2;
                     }
 
-                    p.textIndex ++;
+                    g.textIndex ++;
 
                     // Now after putting in the last character, check
                     // to see if the text is complete. If it is
@@ -194,7 +193,7 @@ class Game{
                         // Reset x and y position.
                         this.posX = CW * 6;
                         this.posY = CH * 6 - (CH / 4);
-                        p.textIndex = 0;
+                        g.textIndex = 0;
                     }
                 }
             }else{
@@ -203,12 +202,12 @@ class Game{
                     this.posX = CW * 6;
                     this.posY += CH + (CH / 4);
                 }
-                if(p.text.charCodeAt(p.textIndex) == keycode){
-                    this.objects.letters[p.textIndex].typed = 1;
+                if(g.text.charCodeAt(g.textIndex) == keycode){
+                    this.objects.letters[g.textIndex].typed = 1;
                 }else{
-                    this.objects.letters[p.textIndex].typed = 2;
+                    this.objects.letters[g.textIndex].typed = 2;
                 }
-                p.textIndex ++;
+                g.textIndex ++;
             }
         }
 
@@ -223,15 +222,15 @@ class Game{
     }
 
     drawCountDown(ctx, num){
+        g.draw(ctx, 1000);
         if(num == 3){
-            ctx.drawImage(threeImg, CW * 23, CH * 20);
+            ctx.drawImage(threeImg, CW * 19, CH * 21 - (CH / 2));
         }else if(num == 2){
-            ctx.drawImage(twoImg, CW * 23, CH * 20);
+            ctx.drawImage(twoImg, CW * 19, CH * 21 - (CH / 2));
         }else if(num == 1){
-            ctx.drawImage(oneImg, CW * 23, CH * 20);
+            ctx.drawImage(oneImg, CW * 19, CH * 21 - (CH / 2));
         }else if(num == 0){
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(goImg, 0, 0);
+            ctx.drawImage(goImg, CW * 15, CH * 13 - (CH / 2));
         }
     }
 
@@ -245,10 +244,10 @@ class Game{
         // starting the game.
         this.objects.letters = [];
         // Update player.
-        p.text = testString;
-        p.textIndex = 0;
+        g.text = texts[Math.floor(Math.random() * texts.length)];
+        g.textIndex = 0;
         // Populate the test to be typed.
-        for(let i of testString){
+        for(let i of g.text){
             let index = i.charCodeAt(0) - CIO;
             this.objects.addLetter(new Letter(this.posX, this.posY, index));
             this.posX += CW;
@@ -268,11 +267,11 @@ class Game{
     }
 
     backspace(){
-        if(p.textIndex){
-            p.textIndex --;
-            this.objects.letters[p.textIndex].typed = 0;
-            this.posX = this.objects.letters[p.textIndex].x;
-            this.posY = this.objects.letters[p.textIndex].y;
+        if(g.textIndex){
+            g.textIndex --;
+            this.objects.letters[g.textIndex].typed = 0;
+            this.posX = this.objects.letters[g.textIndex].x;
+            this.posY = this.objects.letters[g.textIndex].y;
         }
         
         this.draw(ctx, 1000);
@@ -280,13 +279,6 @@ class Game{
 
     click(mx, my){
         this.objects.click(mx, my);
-    }
-}
-
-class Player{
-    constructor(){
-        this.text;
-        this.textIndex;
     }
 }
 
@@ -332,10 +324,17 @@ class Letter{
     }
 }
 
+class Text{
+    constructor(text){
+        this.text = text;
+
+    }
+}
+
 class StartButton{
     constructor(){
-        this.x = canvas.width - (CW * 6) - (CW / 4) - 2;
-        this.y = CH / 2 - (CH / 4) - 4;
+        this.x = canvas.width - (CW * 6) - (CW / 4) - 4;
+        this.y = 0;
         this.width = CW * 5 + (CW / 4);
         this.height = CH + (CH / 2);
         this.clickable = true;
@@ -360,8 +359,8 @@ class StartButton{
         // or not clickable.
         if(this.clickable){
             ctx.fillStyle = 'black';
-            ctx.fillRect(this.x + this.width, this.y + 2, 2, this.height);
-            ctx.fillRect(this.x + 2, this.y + this.height, this.width - 2, 2)
+            ctx.fillRect(this.x + this.width, this.y + 4, 4, this.height);
+            ctx.fillRect(this.x + 4, this.y + this.height, this.width - 4, 4)
         }else{
             ctx.fillStyle = 'rgba(255, 255, 255, .75)';
             ctx.fillRect(this.x, this.y, this.width, this.height);
