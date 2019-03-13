@@ -7,9 +7,9 @@
     Author: Dylan Conway
 */
 
-// Import other files.
+// Import files and methods.
 import Objects from './objects.js';
-import Utils from './utils.js';
+import {calculateWPM, newImage} from './utils.js';
 
 // Import CSS.
 import '../css/main.css';
@@ -22,6 +22,8 @@ import terminalFontThreeURL from '../images/terminalFontThree.png';
 import terminalFontGoURL from '../images/terminalFontGo.png';
 import terminalFontTypio16URL from '../images/terminalFontTypio16.png';
 import terminalFontStartButton16URL from '../images/terminalFontStartButton16.png';
+import terminalFontNumbers32URL from '../images/terminalFontNumbers32.png';
+import terminalFontWPM32URL from '../images/terminalFontWPM32.png';
 
 import homeImage from '../images/terminalFontHome16.png';
 import gitHubImage from '../images/terminalFontGitHub16.png';
@@ -38,19 +40,28 @@ import faviconImg from '../images/favicon.ico';
 
 // The texts to type.
 let texts = [
-    'Room temperature/ Eggnog in my coffee cup/ Fall is delicious.',
-    'Rain falling all day/ A stone cold pencil in hand/ Homework in silence.',
-    'The keyboard clicking/ Code flowing onto the screen/ I am a code god.'
+    'Room temperature / Eggnog in my coffee cup / Fall is delicious.',
+    'Sun shining all day / A stone cold pencil in hand / Homework in silence.',
+    'The keyboard clicking / Code flowing onto the screen / Not one finished app.',
+    'because cards are dumb / i got you some strawberries / they might be poison.',
+    'Claw wander, painless / alarming caterpillars / groaning the autumn.',
+    "From computer to / computer, there is a line / to more computers.",
+    'In the computer / another computer is / running computer.',
+    'From old to summer / The old computer to / the new computer.',
+    "Don't old, computer / computer, old, must compute / How much computer.",
+    'I old computer. / Still must old summer compute / I have been summer.'
 ];
 
 // Images.
-let oneImg = Utils.newImage(terminalFontOneURL);
-let twoImg = Utils.newImage(terminalFontTwoURL);
-let threeImg = Utils.newImage(terminalFontThreeURL);
-let goImg = Utils.newImage(terminalFontGoURL);
-let typioImg = Utils.newImage(terminalFontTypio16URL);
-let startButtonImg = Utils.newImage(terminalFontStartButton16URL);
-let fontImg = Utils.newImage(terminalFont16URL);
+let oneImg = newImage(terminalFontOneURL);
+let twoImg = newImage(terminalFontTwoURL);
+let threeImg = newImage(terminalFontThreeURL);
+let goImg = newImage(terminalFontGoURL);
+let typioImg = newImage(terminalFontTypio16URL);
+let startButtonImg = newImage(terminalFontStartButton16URL);
+let fontImg = newImage(terminalFont16URL);
+let numbersImg = newImage(terminalFontNumbers32URL);
+let wpmImg = newImage(terminalFontWPM32URL);
 
 // There is this offset due to the fact the the index
 // starts at 32 but the index for the image starts
@@ -62,6 +73,11 @@ let CW, CH;
 
 // Canvas and the context.
 let canvas, ctx;
+
+// Time variables.
+let startTime, endTime;
+
+let wpm;
 
 // The game object.
 let g
@@ -121,6 +137,8 @@ class Game{
         this.text;
         this.textIndex;
         this.objects;
+        this.startX = CW * 6;
+        this.startY = CH * 7;
         this.posX;
         this.posY;
         this.init();
@@ -130,9 +148,8 @@ class Game{
         // Make the classes.
         this.objects = new Objects();
         // Set the x and y coordinates.
-        this.posX = CW * 6;
-        // this.posY = CH * 3 + (CH / 4);
-        this.posY = CH * 6 - (CH / 4);
+        this.posX = this.startX;
+        this.posY = this.startY;
 
         // Add the start button.
         this.objects.addButton(new StartButton());
@@ -148,18 +165,22 @@ class Game{
 
         // Draw blue lines.
         ctx.fillStyle = 'cornflowerblue';
-        for(let i = 0; i < canvas.height / (CH + (CH / 4)); i ++){
+        for(let i = 2; i < (canvas.height - (CH * 17))  / (CH + (CH / 4)); i ++){
             ctx.fillRect(0, (i * (CH + (CH / 4))) + (CH * 3), canvas.width, 2);
         }
 
         // Draw the top gray bar.
         ctx.fillStyle = 'gray';
-        ctx.fillRect(0, 0, this.width, (CH * 2) - (CH / 4) + 2);
+        ctx.fillRect(0, 0, this.width, (CH * 4) + (CH / 4) + 2);
+
+        // Draw the bottom gray area.
+        ctx.fillStyle = 'gray';
+        ctx.fillRect(0, CH * 39 + (CH / 4), canvas.width, CH * 13 + (CH / 4));
+        // ctx.fillStyle = 'black';
+        // ctx.fillRect(0, canvas.height - 1, canvas.width, 1);
 
         // Draw Typio at the top.
-        ctx.drawImage(typioImg, CW * 1, CH / 4);
-        ctx.fillStyle = 'black';
-        ctx.fillRect(CW * 1, CH * 1 + 6, CW * 10, 2);
+        ctx.drawImage(typioImg, CW * 0, CH / 2);
 
         // Check correctness of key stroke.
         if(keycode != 1000){
@@ -171,7 +192,7 @@ class Game{
                     // type it
                     this.posX += CW;
                     if(this.posX == this.width - (CW * 6)){
-                        this.posX = CW * 6;
+                        this.posX = this.startX;
                         this.posY += CH + (CH / 4);
                     }
                     if(g.text.charCodeAt(g.textIndex) == keycode){
@@ -187,19 +208,26 @@ class Game{
                     // complete, reset the game. If not do nothing.
                     if(this.checkCorrectness()){
                         // Essentially reset game for now.
+                        endTime = new Date();
+                        ctx.drawImage(wpmImg, 0, CH * 40);
+                        wpm = calculateWPM(startTime, endTime, g.text).toString();
+                        for(let i = 0; i < wpm.length; i ++){
+                            // 32 is the width of each number in the image.
+                            ctx.drawImage(numbersImg, (wpm[i] * 32), 0, 32, 32, i * 32 + (32 * 5), CH * 40, 32, 32);
+                        }
                         this.canType = false;
                         this.objects.letters = [];
                         this.objects.buttons[0].clickable = true;
                         // Reset x and y position.
-                        this.posX = CW * 6;
-                        this.posY = CH * 6 - (CH / 4);
+                        this.posX = this.startX;
+                        this.posY = this.startY;
                         g.textIndex = 0;
                     }
                 }
             }else{
                 this.posX += CW;
                 if(this.posX == this.width - (CW * 6)){
-                    this.posX = CW * 6;
+                    this.posX = this.startX;
                     this.posY += CH + (CH / 4);
                 }
                 if(g.text.charCodeAt(g.textIndex) == keycode){
@@ -224,13 +252,13 @@ class Game{
     drawCountDown(ctx, num){
         g.draw(ctx, 1000);
         if(num == 3){
-            ctx.drawImage(threeImg, CW * 19, CH * 21 - (CH / 2));
+            ctx.drawImage(threeImg, CW * 19, CH * 17 - (CH / 4));
         }else if(num == 2){
-            ctx.drawImage(twoImg, CW * 19, CH * 21 - (CH / 2));
+            ctx.drawImage(twoImg, CW * 19, CH * 17 - (CH / 4));
         }else if(num == 1){
-            ctx.drawImage(oneImg, CW * 19, CH * 21 - (CH / 2));
+            ctx.drawImage(oneImg, CW * 19, CH * 17 - (CH / 4));
         }else if(num == 0){
-            ctx.drawImage(goImg, CW * 15, CH * 13 - (CH / 2));
+            ctx.drawImage(goImg, CW * 15, CH * 9 - (CH / 4));
         }
     }
 
@@ -252,18 +280,18 @@ class Game{
             this.objects.addLetter(new Letter(this.posX, this.posY, index));
             this.posX += CW;
             if(this.posX == this.width - (CW * 6)){
-                this.posX = CW * 6;
+                this.posX = this.startX;
                 this.posY += CH + (CH / 4);
             }
         }
         // Reset the x and y position.
-        this.posX = CW * 6;
-        // this.posY = CH * 3 + (CH / 4);
-        this.posY = CH * 6 - (CH / 4);
+        this.posX = this.startX;
+        this.posY = this.startY;
         // Then draw the letters. And pass
         // a fake keycode because no key was
         // pressed.
         this.draw(ctx, 1000);
+        startTime = new Date();
     }
 
     backspace(){
@@ -334,7 +362,7 @@ class Text{
 class StartButton{
     constructor(){
         this.x = canvas.width - (CW * 6) - (CW / 4) - 4;
-        this.y = 0;
+        this.y = CH - (CH / 8);
         this.width = CW * 5 + (CW / 4);
         this.height = CH + (CH / 2);
         this.clickable = true;
