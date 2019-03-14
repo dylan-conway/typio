@@ -3,6 +3,7 @@
     Typ.io
 
     Currently a pixel type racing game.
+    Many updates to come.
 
     Author: Dylan Conway
 */
@@ -22,7 +23,7 @@ import terminalFontThreeURL from '../images/terminalFontThree.png';
 import terminalFontGoURL from '../images/terminalFontGo.png';
 import terminalFontTypio16URL from '../images/terminalFontTypio16.png';
 import terminalFontStartButton16URL from '../images/terminalFontStartButton16.png';
-import terminalFontNumbers32URL from '../images/terminalFontNumbers32.png';
+import terminalFontNumbers16URL from '../images/terminalFontNumbers16.png';
 import terminalFontWPM32URL from '../images/terminalFontWPM32.png';
 
 import homeImage from '../images/terminalFontHome16.png';
@@ -43,9 +44,7 @@ let texts = [
     'Room temperature / eggnog in my coffee cup. / Fall is delicious.',
     'Sun shining all day / A stone cold pencil in hand / Homework in silence.',
     'The keyboard clicking / Code flowing onto the screen / Not one finished app.',
-    'because cards are dumb / i got you some strawberries / they might be poison.',
-    'Claw wander, painless / alarming caterpillars / groaning the autumn.',
-    "From computer to / computer, there is a line / to more computers.",
+    "From computer to / computer, there is a line / to more computer.",
     'In the computer / another computer is / running computer.',
     'From old to summer / The old computer to / the new computer.',
     "Don't old, computer. / Computer, however old, / must still computer.",
@@ -60,7 +59,7 @@ let goImg = newImage(terminalFontGoURL);
 let typioImg = newImage(terminalFontTypio16URL);
 let startButtonImg = newImage(terminalFontStartButton16URL);
 let fontImg = newImage(terminalFont16URL);
-let numbersImg = newImage(terminalFontNumbers32URL);
+let numbersImg = newImage(terminalFontNumbers16URL);
 let wpmImg = newImage(terminalFontWPM32URL);
 
 // There is this offset due to the fact the the index
@@ -165,22 +164,16 @@ class Game{
 
         // Draw blue lines.
         ctx.fillStyle = 'cornflowerblue';
-        for(let i = 2; i < (canvas.height - (CH * 17))  / (CH + (CH / 4)); i ++){
+        for(let i = 0; i < (canvas.height - (CH * 17))  / (CH + (CH / 4)); i ++){
             ctx.fillRect(0, (i * (CH + (CH / 4))) + (CH * 3), canvas.width, 2);
         }
-
-        // Draw the top gray bar.
-        ctx.fillStyle = 'gray';
-        ctx.fillRect(0, 0, this.width, (CH * 4) + (CH / 4) + 2);
 
         // Draw the bottom gray area.
         ctx.fillStyle = 'gray';
         ctx.fillRect(0, CH * 39 + (CH / 4), canvas.width, CH * 13 + (CH / 4));
-        // ctx.fillStyle = 'black';
-        // ctx.fillRect(0, canvas.height - 1, canvas.width, 1);
 
         // Draw Typio at the top.
-        ctx.drawImage(typioImg, CW * 0, CH / 2);
+        ctx.drawImage(typioImg, CW / 4, CH / 2);
 
         // Check correctness of key stroke.
         if(keycode != 1000){
@@ -209,11 +202,11 @@ class Game{
                     if(this.checkCorrectness()){
                         // Essentially reset game for now.
                         endTime = new Date();
-                        ctx.drawImage(wpmImg, 0, CH * 40);
+                        ctx.drawImage(wpmImg, CW, CH * 37 + 1);
                         wpm = calculateWPM(startTime, endTime, g.text).toString();
                         for(let i = 0; i < wpm.length; i ++){
                             // 32 is the width of each number in the image.
-                            ctx.drawImage(numbersImg, (wpm[i] * 32), 0, 32, 32, i * 32 + (32 * 5), CH * 40, 32, 32);
+                            ctx.drawImage(numbersImg, (wpm[i] * CW), 0, CW, CH, i * CW + (CW * 5) + CW, CH * 37 + 1, CW, CH);
                         }
                         this.canType = false;
                         this.objects.letters = [];
@@ -362,7 +355,7 @@ class Text{
 class StartButton{
     constructor(){
         this.x = canvas.width - (CW * 6) - (CW / 4) - 4;
-        this.y = CH - (CH / 8);
+        this.y = CH - (CH / 4);
         this.width = CW * 5 + (CW / 4);
         this.height = CH + (CH / 2);
         this.clickable = true;
@@ -387,11 +380,17 @@ class StartButton{
         // or not clickable.
         if(this.clickable){
             ctx.fillStyle = 'black';
+            ctx.fillRect(this.x, this.y, 2, this.height);
+            ctx.fillRect(this.x, this.y, this.width, 2);
             ctx.fillRect(this.x + this.width, this.y + 4, 4, this.height);
             ctx.fillRect(this.x + 4, this.y + this.height, this.width - 4, 4)
         }else{
             ctx.fillStyle = 'rgba(255, 255, 255, .75)';
             ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.strokeRect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
         }
     }
 

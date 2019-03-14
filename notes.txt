@@ -1,4 +1,10 @@
 make entire website have the same blue lines as the canvas
 and write everything inbetween.
 
-get rid of transparent cornflowerblue over the canvas.
+get rid of transparent cornflowerblue over the canvas. check
+
+display more data at the bottom inbetween the lines.
+
+tweek the start button a little more(adjust shadow and position).
+
+add more poems!!!!

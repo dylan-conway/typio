@@ -1,3 +1,3 @@
 # TYPIO
 
-[website](https://dylan-conway.github.io)
+[website](https://dylan-conway.github.io)(Currently Chrome only)
