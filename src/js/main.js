@@ -31,6 +31,7 @@ import gitHubImage from '../images/terminalFontGitHub16.png';
 
 // Add the favicon.
 import faviconImg from '../images/favicon.ico';
+import { createContext } from 'vm';
 (function(){
     let link = document.createElement('link');
     link.type = 'image/x-icon';
@@ -50,6 +51,12 @@ let texts = [
     "Don't old, computer. / Computer, however old, / must still computer.",
     'I old computer. / Still must old summer compute / I have been summer.'
 ];
+
+// Stats object.
+let stats = {
+    numErrors: 0,
+    wpm: 0
+}
 
 // Images.
 let oneImg = newImage(terminalFontOneURL);
@@ -204,10 +211,7 @@ class Game{
                         endTime = new Date();
                         ctx.drawImage(wpmImg, CW, CH * 37 + 1);
                         wpm = calculateWPM(startTime, endTime, g.text).toString();
-                        for(let i = 0; i < wpm.length; i ++){
-                            // 32 is the width of each number in the image.
-                            ctx.drawImage(numbersImg, (wpm[i] * CW), 0, CW, CH, i * CW + (CW * 5) + CW, CH * 37 + 1, CW, CH);
-                        }
+                        drawNumber(numbersImg, (CW * 5) + CW, CH * 37 + 1, wpm)
                         this.canType = false;
                         this.objects.letters = [];
                         this.objects.buttons[0].clickable = true;
@@ -355,7 +359,7 @@ class Text{
 class StartButton{
     constructor(){
         this.x = canvas.width - (CW * 6) - (CW / 4) - 4;
-        this.y = CH - (CH / 4);
+        this.y = CH - (CH / 8);
         this.width = CW * 5 + (CW / 4);
         this.height = CH + (CH / 2);
         this.clickable = true;
@@ -380,10 +384,10 @@ class StartButton{
         // or not clickable.
         if(this.clickable){
             ctx.fillStyle = 'black';
-            ctx.fillRect(this.x, this.y, 2, this.height);
-            ctx.fillRect(this.x, this.y, this.width, 2);
-            ctx.fillRect(this.x + this.width, this.y + 4, 4, this.height);
-            ctx.fillRect(this.x + 4, this.y + this.height, this.width - 4, 4)
+            // ctx.fillRect(this.x, this.y, 1, this.height);
+            // ctx.fillRect(this.x, this.y, this.width, 1);
+            ctx.fillRect(this.x + this.width, this.y + 2, 2, this.height);
+            ctx.fillRect(this.x + 2, this.y + this.height, this.width - 2, 2)
         }else{
             ctx.fillStyle = 'rgba(255, 255, 255, .75)';
             ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -406,5 +410,34 @@ class StartButton{
         // setTimeout(()=>{g.drawCountDown(ctx, 1)}, 200);
         // setTimeout(()=>{g.drawCountDown(ctx, 0)}, 300);
         // setTimeout(()=>{g.startGame()}, 350);
+    }
+}
+
+function drawWord(image, x, y, word){
+    // Assume monospace
+    let height = image.height;
+    let width = height;
+    for(let i = 0; i < word.length; i ++){
+        ctx.drawImage(
+            image,
+            (word.charCodeAt(i) - CIO) * width, 0,  // Source x and y.
+            width, height,                          // Source width and height.
+            x + i * width, y,                       // Destination x and y.
+            width, height                           // Destination width and height.
+        );
+    }
+}
+
+function drawNumber(image, x, y, number){
+    let height = image.height;
+    let width = height;
+    for(let i = 0; i < number.length; i ++){
+        ctx.drawImage(
+            image,
+            number[i] * width, 0,
+            width, height,
+            x + i * width, y,
+            width, height
+        );
     }
 }
