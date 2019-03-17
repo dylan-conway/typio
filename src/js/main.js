@@ -17,21 +17,13 @@ import '../css/main.css';
 
 // Import images.
 import terminalFont16URL from '../images/terminalFont16.png';
-import terminalFontOneURL from '../images/terminalFontOne.png';
-import terminalFontTwoURL from '../images/terminalFontTwo.png';
-import terminalFontThreeURL from '../images/terminalFontThree.png';
-import terminalFontGoURL from '../images/terminalFontGo.png';
-import terminalFontTypio16URL from '../images/terminalFontTypio16.png';
-import terminalFontStartButton16URL from '../images/terminalFontStartButton16.png';
-import terminalFontNumbers16URL from '../images/terminalFontNumbers16.png';
-import terminalFontWPM32URL from '../images/terminalFontWPM32.png';
+import terminalFont32URL from '../images/terminalFont32.png';
 
 import homeImage from '../images/terminalFontHome16.png';
 import gitHubImage from '../images/terminalFontGitHub16.png';
 
 // Add the favicon.
 import faviconImg from '../images/favicon.ico';
-import { createContext } from 'vm';
 (function(){
     let link = document.createElement('link');
     link.type = 'image/x-icon';
@@ -59,15 +51,8 @@ let stats = {
 }
 
 // Images.
-let oneImg = newImage(terminalFontOneURL);
-let twoImg = newImage(terminalFontTwoURL);
-let threeImg = newImage(terminalFontThreeURL);
-let goImg = newImage(terminalFontGoURL);
-let typioImg = newImage(terminalFontTypio16URL);
-let startButtonImg = newImage(terminalFontStartButton16URL);
-let fontImg = newImage(terminalFont16URL);
-let numbersImg = newImage(terminalFontNumbers16URL);
-let wpmImg = newImage(terminalFontWPM32URL);
+let font16Img = newImage(terminalFont16URL);
+let font32Img = newImage(terminalFont32URL);
 
 // There is this offset due to the fact the the index
 // starts at 32 but the index for the image starts
@@ -83,7 +68,7 @@ let canvas, ctx;
 // Time variables.
 let startTime, endTime;
 
-let wpm;
+
 
 // The game object.
 let g
@@ -163,6 +148,14 @@ class Game{
         // Call the initial draw.
         this.draw(ctx, 1000);
     }
+
+    moveCursor(){
+        this.posX += CW;
+        if(this.posX == this.width - (CW * 6)){
+            this.posX = this.startX;
+            this.posY += CH + (CH / 4);
+        }
+    }
     
     draw(ctx, keycode){
         // Refresh the canvas.
@@ -180,7 +173,7 @@ class Game{
         ctx.fillRect(0, CH * 39 + (CH / 4), canvas.width, CH * 13 + (CH / 4));
 
         // Draw Typio at the top.
-        ctx.drawImage(typioImg, CW / 4, CH / 2);
+        drawText(font32Img, CW / 4, CH / 2, 'typ.io', 0);
 
         // Check correctness of key stroke.
         if(keycode != 1000){
@@ -190,15 +183,14 @@ class Game{
                 if(this.objects.letters[g.text.length - 1].typed == 0){
                     // If the key has not been typed, go ahead and
                     // type it
-                    this.posX += CW;
-                    if(this.posX == this.width - (CW * 6)){
-                        this.posX = this.startX;
-                        this.posY += CH + (CH / 4);
-                    }
+
+                    this.moveCursor();
+
                     if(g.text.charCodeAt(g.textIndex) == keycode){
                         this.objects.letters[g.textIndex].typed = 1;
                     }else{
                         this.objects.letters[g.textIndex].typed = 2;
+                        stats.numErrors ++;
                     }
 
                     g.textIndex ++;
@@ -209,9 +201,13 @@ class Game{
                     if(this.checkCorrectness()){
                         // Essentially reset game for now.
                         endTime = new Date();
-                        ctx.drawImage(wpmImg, CW, CH * 37 + 1);
-                        wpm = calculateWPM(startTime, endTime, g.text).toString();
-                        drawNumber(numbersImg, (CW * 5) + CW, CH * 37 + 1, wpm)
+                        // Calculate and draw words per  minute.
+                        drawText(font16Img, CW * 2, CH * 36 - (CH / 4), 'WPM: ', 1);
+                        stats.wpm = calculateWPM(startTime, endTime, g.text).toString();
+                        drawText(font16Img, CW * 7, CH * 36 - (CH / 4), stats.wpm, 1);
+                        // Draw the number of errors.
+                        drawText(font16Img, CW * 2, CH * 37, 'Errors: ', 1);
+                        drawText(font16Img, CW * 10, CH * 37, stats.numErrors.toString(), 1);
                         this.canType = false;
                         this.objects.letters = [];
                         this.objects.buttons[0].clickable = true;
@@ -219,18 +215,20 @@ class Game{
                         this.posX = this.startX;
                         this.posY = this.startY;
                         g.textIndex = 0;
+
+                        stats.wpm = 0;
+                        stats.numErrors = 0;
                     }
                 }
             }else{
-                this.posX += CW;
-                if(this.posX == this.width - (CW * 6)){
-                    this.posX = this.startX;
-                    this.posY += CH + (CH / 4);
-                }
+
+                this.moveCursor();
+
                 if(g.text.charCodeAt(g.textIndex) == keycode){
                     this.objects.letters[g.textIndex].typed = 1;
                 }else{
                     this.objects.letters[g.textIndex].typed = 2;
+                    stats.numErrors ++;
                 }
                 g.textIndex ++;
             }
@@ -249,13 +247,13 @@ class Game{
     drawCountDown(ctx, num){
         g.draw(ctx, 1000);
         if(num == 3){
-            ctx.drawImage(threeImg, CW * 19, CH * 17 - (CH / 4));
+            drawText(font32Img, (canvas.width / 2) - CW, CH * 17 - (CH / 4), '3', 2);
         }else if(num == 2){
-            ctx.drawImage(twoImg, CW * 19, CH * 17 - (CH / 4));
+            drawText(font32Img, (canvas.width / 2) - CW, CH * 17 - (CH / 4), '2', 2);
         }else if(num == 1){
-            ctx.drawImage(oneImg, CW * 19, CH * 17 - (CH / 4));
+            drawText(font32Img, (canvas.width / 2) - CW, CH * 17 - (CH / 4), '1', 2);
         }else if(num == 0){
-            ctx.drawImage(goImg, CW * 15, CH * 9 - (CH / 4));
+            drawText(font32Img, (canvas.width / 2) - (CW * 2), CH * 17 - (CH / 4), 'GO', 3);
         }
     }
 
@@ -329,7 +327,7 @@ class Letter{
 
         // Draw letter.
         ctx.drawImage(
-            fontImg,
+            font16Img,
             this.index * CW,
             0,
             CW,
@@ -349,13 +347,6 @@ class Letter{
     }
 }
 
-class Text{
-    constructor(text){
-        this.text = text;
-
-    }
-}
-
 class StartButton{
     constructor(){
         this.x = canvas.width - (CW * 6) - (CW / 4) - 4;
@@ -368,38 +359,26 @@ class StartButton{
     draw(ctx){
         // Draw background box.
         ctx.fillStyle = 'darkgray';
-        ctx.fillRect(
-            this.x,
-            this.y,
-            this.width,
-            this.height
-        );
-        // Draw image.
-        ctx.drawImage(
-            startButtonImg,
-            this.x + (CW / 8),
-            this.y + (CH / 4)
-        );
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+
+        // Draw Start.
+        drawText(font16Img, this.x + (CW / 8), this.y + (CH / 4), 'Start', 0);
+
         // Make the button look clickable
         // or not clickable.
         if(this.clickable){
             ctx.fillStyle = 'black';
-            // ctx.fillRect(this.x, this.y, 1, this.height);
-            // ctx.fillRect(this.x, this.y, this.width, 1);
             ctx.fillRect(this.x + this.width, this.y + 2, 2, this.height);
             ctx.fillRect(this.x + 2, this.y + this.height, this.width - 2, 2)
         }else{
-            ctx.fillStyle = 'rgba(255, 255, 255, .75)';
+            ctx.fillStyle = 'rgba(0, 0, 0, .5)';
             ctx.fillRect(this.x, this.y, this.width, this.height);
-            ctx.strokeStyle = 'black';
-            ctx.beginPath();
-            ctx.strokeRect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
         }
     }
 
     clicked(){
         this.clickable = false;
+
         g.drawCountDown(ctx, 3);
         setTimeout(()=>{g.drawCountDown(ctx, 2)}, 1000);
         setTimeout(()=>{g.drawCountDown(ctx, 1)}, 2000);
@@ -413,31 +392,28 @@ class StartButton{
     }
 }
 
-function drawWord(image, x, y, word){
+function drawText(image, x, y, word, typed){
     // Assume monospace
     let height = image.height;
     let width = height;
     for(let i = 0; i < word.length; i ++){
+        if(typed == 1){
+            ctx.fillStyle = 'rgba(100, 149, 237, 1)';
+            ctx.fillRect(x + width * i, y - 2, width, height + 2);
+        }else if(typed == 2){
+            ctx.fillStyle = 'rgba(205, 92, 92, 1)';
+            ctx.fillRect(x + width * i, y - 2, width, height + 2);
+        }else if(typed == 3){
+            // Other colors.
+            ctx.fillStyle = 'rgba(0, 255, 127, 1)';
+            ctx.fillRect(x + width * i, y - 2, width, height + 2);
+        }
         ctx.drawImage(
             image,
             (word.charCodeAt(i) - CIO) * width, 0,  // Source x and y.
             width, height,                          // Source width and height.
             x + i * width, y,                       // Destination x and y.
             width, height                           // Destination width and height.
-        );
-    }
-}
-
-function drawNumber(image, x, y, number){
-    let height = image.height;
-    let width = height;
-    for(let i = 0; i < number.length; i ++){
-        ctx.drawImage(
-            image,
-            number[i] * width, 0,
-            width, height,
-            x + i * width, y,
-            width, height
         );
     }
 }

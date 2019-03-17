@@ -7,6 +7,9 @@ body {
     margin: 64px 0 0 0;
     text-align: center;
 }
+canvas {
+    /* border: 1px solid black; */
+}
 footer {
     text-align: center;
 }
