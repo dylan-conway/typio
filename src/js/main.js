@@ -68,10 +68,11 @@ let canvas, ctx;
 // Time variables.
 let startTime, endTime;
 
-
+// Sleep function.
+const sleep = ms => new Promise((resolve) => setTimeout(resolve, ms));
 
 // The game object.
-let g
+let g;
 
 window.onload = () => {
     canvas = document.getElementById('canvas');
@@ -174,6 +175,8 @@ class Game{
 
         // Draw Typio at the top.
         drawText(font32Img, CW / 4, CH / 2, 'typ.io', 0);
+
+        // Typing logic.
 
         // Check correctness of key stroke.
         if(keycode != 1000){
@@ -378,12 +381,12 @@ class StartButton{
 
     clicked(){
         this.clickable = false;
-
+        
         g.drawCountDown(ctx, 3);
-        setTimeout(()=>{g.drawCountDown(ctx, 2)}, 1000);
-        setTimeout(()=>{g.drawCountDown(ctx, 1)}, 2000);
-        setTimeout(()=>{g.drawCountDown(ctx, 0)}, 3000);
-        setTimeout(()=>{g.startGame()}, 3500);
+        sleep(1000).then(() => g.drawCountDown(ctx, 2));
+        sleep(2000).then(() => g.drawCountDown(ctx, 1));
+        sleep(3000).then(() => g.drawCountDown(ctx, 0));
+        sleep(3500).then(() => g.startGame());
 
         // setTimeout(()=>{g.drawCountDown(ctx, 2)}, 100);
         // setTimeout(()=>{g.drawCountDown(ctx, 1)}, 200);
@@ -396,7 +399,9 @@ function drawText(image, x, y, word, typed){
     // Assume monospace
     let height = image.height;
     let width = height;
+
     for(let i = 0; i < word.length; i ++){
+        // Color background if specified. 
         if(typed == 1){
             ctx.fillStyle = 'rgba(100, 149, 237, 1)';
             ctx.fillRect(x + width * i, y - 2, width, height + 2);
@@ -404,7 +409,6 @@ function drawText(image, x, y, word, typed){
             ctx.fillStyle = 'rgba(205, 92, 92, 1)';
             ctx.fillRect(x + width * i, y - 2, width, height + 2);
         }else if(typed == 3){
-            // Other colors.
             ctx.fillStyle = 'rgba(0, 255, 127, 1)';
             ctx.fillRect(x + width * i, y - 2, width, height + 2);
         }
